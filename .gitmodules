@@ -1,0 +1,3 @@
+[submodule "Crafty"]
+	path = Crafty
+	url = https://github.com/ksiondag/Crafty.git
