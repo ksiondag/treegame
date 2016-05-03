@@ -5,7 +5,19 @@
 Crafty.c("TreeLeaf", {
     _left: null,
     _right: null,
+    _value: null,
     _parentNode: null,
+    init: function () {
+        this.bind("Remove", function () {
+            if (this.parent()) {
+                if (this.parent().left() === this) {
+                    this.parent().left(null);
+                } else {
+                    this.parent().right(null);
+                }
+            }
+        });
+    },
     depth: function (n) {
         if (arguments.length === 0) {
             n = 0;
@@ -41,7 +53,9 @@ Crafty.c("TreeLeaf", {
             return this._left;
         }
         this._left = left;
-        this._left.parent(this);
+        if (left !== null) {
+            this._left.parent(this);
+        }
         return this;
     },
     right: function (right) {
@@ -49,7 +63,39 @@ Crafty.c("TreeLeaf", {
             return this._right;
         }
         this._right = right;
-        this._right.parent(this);
+        if (right !== null) {
+            this._right.parent(this);
+        }
+        return this;
+    },
+    insert: function (leaf, comparator) {
+        if (comparator(this, leaf) > 0) {
+            if (this.left()) {
+                this.left().insert(leaf, comparator);
+            } else {
+                this.left(leaf);
+            }
+        } else {
+            if (this.right()) {
+                this.right().insert(leaf, comparator);
+            } else {
+                this.right(leaf);
+            }
+        }
+    },
+    inorder: function (callback) {
+        if (this.left()) {
+            this.left().inorder(callback);
+        }
+        callback(this);
+        if (this.right()) {
+            this.right().inorder(callback);
+        }
+    },
+    root: function () {
+        if (this.parent()) {
+            return this.parent().root();
+        }
         return this;
     }
 });

@@ -36,20 +36,22 @@ connectLeaves = function (leaf1, leaf2) {
 };
 
 growHelper = function (leaf, center, column, levels) {
-    var x, y, width, height;
+    var x, y, width, height, magicNumber;
 
     if (!leaf) {
         return;
     }
 
-    width = this.w /(3 * Math.pow(2, levels - 1)),
-    height = this.h /(3 * levels)
+    magicNumber = Math.max(levels, 3);
+
+    width = this.w /(Math.pow(2, magicNumber - 1));
+    height = this.h /(2 * magicNumber);
 
     x = ((2*column + 1 ) * center) - (width / 2);
     if (leaf.parent()) {
-        y = leaf.parent().y + leaf.parent().h*2;
+        y = leaf.parent().y + 1.5*height;
     } else {
-        y = this.h / (3 * levels);
+        y = this.h / (3 * magicNumber);
     }
 
     this.attach(
@@ -79,14 +81,34 @@ Crafty.c("TreeRender", {
     grow: function (root) {
         var levels = root.depth();
 
-        this.attr({
-            x: 0,
-            y: 0,
-            w: Crafty.viewport.width,
-            h: Crafty.viewport.height
-        });
-
         growHelper.call(this, root, Crafty.viewport.width/2, 0, levels);
+    }
+});
+
+Crafty.c("SpellTree", {
+    _goal: null,
+    init: function () {
+        this.requires("2D,DOM,Text");
+    },
+    goal: function (goal) {
+        if (arguments.length === 0) {
+            return this._goal;
+        }
+        this._goal = goal;
+        return this;
+    },
+    result: function (root) {
+        var spelling = '';
+        root.inorder(function (leaf) {
+            if (leaf.text()) {
+                spelling += leaf.text();
+            }
+        });
+        return spelling;
+    },
+    spelling: function (root) {
+        this.text('Spelling: ' + this.result(root));
+        return this;
     }
 });
 
