@@ -14,25 +14,25 @@ connectLeaves = function (leaf1, leaf2) {
     line = Crafty.e("2D,DOM,Color2,Line")
         .color('brown')
 
-    this.attach(
-        line
-            .attr({
-                x: leaf1.x + leaf1.w/2,
-                y: leaf1.y + leaf1.h/2,
-                w: Math.sqrt(
-                    (leaf1.x - leaf2.x) * (leaf1.x - leaf2.x)
-                    +
-                    (leaf1.y - leaf2.y) * (leaf1.y - leaf2.y)
-                ),
-                h: 5,
-                z: -1
-            })
-    );
+    this.attach(line);
 
-    line.rotation = Math.atan2(
-        leaf2.y - leaf1.y,
-        leaf2.x - leaf1.x
-    ) * (180 / Math.PI);
+    line
+        .attr({
+            x: leaf1.x + leaf1.w/2,
+            y: leaf1.y + leaf1.h/2,
+            w: Math.sqrt(
+                (leaf1.x - leaf2.x) * (leaf1.x - leaf2.x)
+                +
+                (leaf1.y - leaf2.y) * (leaf1.y - leaf2.y)
+            ),
+            h: 5,
+            z: -1
+        })
+        .rotation = Math.atan2(
+            leaf2.y - leaf1.y,
+            leaf2.x - leaf1.x
+        ) * (180 / Math.PI)
+    ;
 };
 
 growHelper = function (leaf, center, column, levels) {
@@ -51,17 +51,17 @@ growHelper = function (leaf, center, column, levels) {
     if (leaf.parent()) {
         y = leaf.parent().y + 1.5*height;
     } else {
-        y = this.h / (3 * magicNumber);
+        y = this.h / (3 * magicNumber) + 20;
     }
 
-    this.attach(
-        leaf.attr({
-            x: x,
-            y: y,
-            w: width,
-            h: height
-        })
-    );
+    this.attach(leaf);
+
+    leaf.attr({
+        x: x,
+        y: y,
+        w: width,
+        h: height
+    });
 
     connectLeaves.call(this, leaf.parent(), leaf);
     growHelper.call(this, leaf.left(), center/2, column * 2, levels);

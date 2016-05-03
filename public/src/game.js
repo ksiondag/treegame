@@ -2,6 +2,8 @@ Crafty.scene('game', function () {
 
 'use strict';
 
+Crafty.background('#FFFFFF');
+
 var shuffle = function (a) {
     var j, x, i;
     for (i = a.length; i; i -= 1) {
@@ -95,7 +97,7 @@ var spelling = Crafty.e("SpellTree")
     .goal(word)
     .spelling(root)
     .attr({
-        x: Crafty.viewport.width/4,
+        x: 0,
         y: 3*Crafty.viewport.height/4,
         w: 500,
         h: 100
@@ -105,7 +107,7 @@ var spelling = Crafty.e("SpellTree")
 
 var spellGoal = Crafty.e('2D,DOM,Text')
     .attr({
-        x: Crafty.viewport.width/4,
+        x: 0,
         y: 3*Crafty.viewport.height/4 + Crafty.viewport.height/8,
         w: 500,
         h: 100
@@ -116,7 +118,7 @@ var spellGoal = Crafty.e('2D,DOM,Text')
 
 var startOver = Crafty.e('2D,DOM,Text,Mouse')
     .attr({
-        x: Crafty.viewport.width/2,
+        x: 3*Crafty.viewport.width/4 - Crafty.viewport.width/8,
         y: 3*Crafty.viewport.height/4 + Crafty.viewport.height/16,
         w: 500,
         h: 100
